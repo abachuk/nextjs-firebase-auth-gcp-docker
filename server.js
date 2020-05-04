@@ -1,45 +1,51 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const FileStore = require("session-file-store")(session);
+const { FirestoreStore } = require("@google-cloud/connect-firestore");
 const next = require("next");
 const admin = require("firebase-admin");
-
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const firebase = admin.initializeApp(
-  {
-    credential: admin.credential.cert(require("./credentials/server")),
-  },
-  "server"
-);
+const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY;
+const firebaseAdmin = admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: firebasePrivateKey.replace(/\\n/g, "\n"),
+  }),
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+});
 
 app.prepare().then(() => {
   const server = express();
+  //server.use(bodyParser.json()); // this breaks all POST /api/ endpoints
 
-  server.use(bodyParser.json());
   server.use(
     session({
-      secret: "geheimnis",
+      secret: "secretum",
       saveUninitialized: true,
-      store: new FileStore({ secret: "geheimnis" }),
+      store: new FirestoreStore({
+        dataset: firebaseAdmin.firestore(),
+      }),
       resave: false,
       rolling: true,
-      cookie: { maxAge: 604800000, httpOnly: true }, // week
+      httpOnly: true,
+      cookie: { maxAge: 604800000 }, // week
     })
   );
 
   server.use((req, res, next) => {
-    req.firebaseServer = firebase;
+    req.firebaseServer = firebaseAdmin;
+    //console.log("current user on server", firebaseAdmin.auth());
+    // console.log(req.session);
     next();
   });
 
-  server.get("*", (req, res) => {
-    return handle(req, res);
-  });
+  server.get("*", (req, res) => handle(req, res));
+  server.post("*", (req, res) => handle(req, res));
 
   server.listen(port, (err) => {
     if (err) throw err;

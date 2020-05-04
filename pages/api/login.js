@@ -10,6 +10,4 @@ export default (req, res) => {
     })
     .then((decodedToken) => res.json({ status: true, decodedToken }))
     .catch((error) => res.json({ error }));
-  req.session = null;
-  res.status(200).json({ status: true });
 };
