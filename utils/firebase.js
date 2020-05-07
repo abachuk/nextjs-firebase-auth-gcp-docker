@@ -13,8 +13,6 @@ const config = {
   appId: publicRuntimeConfig.FIREBASE_APP_ID,
 };
 
-console.log(config);
-
 !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
 
 export const firebaseInstance = firebase.app();

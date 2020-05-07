@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-// import AppBar from "@material-ui/core/AppBar";
-// import Toolbar from "@material-ui/core/Toolbar";
-// import Hidden from "@material-ui/core/Hidden";
-// import Typography from "@material-ui/core/Typography";
-// import Button from "@material-ui/core/Button";
-// import IconButton from "@material-ui/core/IconButton";
-// import MenuIcon from "@material-ui/icons/Menu";
 import { auth } from "../utils/firebase";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
-const drawerWidth = 240;
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -21,34 +14,9 @@ const styles = (theme) => ({
     textAlign: "center",
     color: theme.palette.text.secondary,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
+  content: {
     flexGrow: 1,
-  },
-  appBar: {
-    [theme.breakpoints.up("sm")]: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    color: "#fff",
-  },
-  appBarShift: {
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-  },
-  hide: {
-    display: "none",
+    padding: theme.spacing(3),
   },
   toolbar: {
     display: "flex",
@@ -56,10 +24,6 @@ const styles = (theme) => ({
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
   },
 });
 
@@ -74,7 +38,6 @@ const withDashboard = (Page) => {
 
     static getInitialProps = async ({ req, res }) => {
       const isServer = !!req;
-      console.log(req.session.decodedToken);
       if (isServer) {
         if (
           !req.session ||
@@ -110,11 +73,16 @@ const withDashboard = (Page) => {
     componentDidMount() {
       auth.onAuthStateChanged((auth) => {
         if (auth && auth.uid) {
-          console.log("auth changed 116", auth);
           this.setState({ user: auth, uid: auth.uid });
         }
       });
     }
+
+    handleSidebarToggle = () => {
+      this.setState((prevState) => ({
+        sidebarOpen: !prevState.sidebarOpen,
+      }));
+    };
 
     render() {
       const { classes } = this.props;
@@ -123,6 +91,17 @@ const withDashboard = (Page) => {
           <CssBaseline />
           <main className={classes.content}>
             <div className={classes.toolbar} />
+            <Header
+              handleSidebarToggle={this.handleSidebarToggle}
+              sidebarOpen={this.state.sidebarOpen}
+            />
+            <Sidebar
+              isOpen={this.state.sidebarOpen}
+              mobileSidebarOpen={this.state.mobileSidebarOpen}
+              handleSidebarToggle={this.handleSidebarToggle}
+              handleDrawerClose={this.handleDrawerClose}
+              handleDrawerMobileClose={this.handleDrawerMobileClose}
+            />
             <Page {...this.props} />
           </main>
         </div>

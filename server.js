@@ -39,8 +39,6 @@ app.prepare().then(() => {
 
   server.use((req, res, next) => {
     req.firebaseServer = firebaseAdmin;
-    //console.log("current user on server", firebaseAdmin.auth());
-    // console.log(req.session);
     next();
   });
 
