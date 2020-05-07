@@ -89,19 +89,21 @@ const withDashboard = (Page) => {
       return (
         <div className={classes.root}>
           <CssBaseline />
+          <Header
+            handleSidebarToggle={this.handleSidebarToggle}
+            sidebarOpen={this.state.sidebarOpen}
+            session={this.props.session}
+          />
+          <Sidebar
+            isOpen={this.state.sidebarOpen}
+            mobileSidebarOpen={this.state.mobileSidebarOpen}
+            handleSidebarToggle={this.handleSidebarToggle}
+            handleDrawerClose={this.handleDrawerClose}
+            handleDrawerMobileClose={this.handleDrawerMobileClose}
+          />
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <Header
-              handleSidebarToggle={this.handleSidebarToggle}
-              sidebarOpen={this.state.sidebarOpen}
-            />
-            <Sidebar
-              isOpen={this.state.sidebarOpen}
-              mobileSidebarOpen={this.state.mobileSidebarOpen}
-              handleSidebarToggle={this.handleSidebarToggle}
-              handleDrawerClose={this.handleDrawerClose}
-              handleDrawerMobileClose={this.handleDrawerMobileClose}
-            />
+
             <Page {...this.props} />
           </main>
         </div>

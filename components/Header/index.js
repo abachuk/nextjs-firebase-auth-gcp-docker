@@ -7,6 +7,8 @@ import Hidden from "@material-ui/core/Hidden";
 import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
+import UserMenu from "./UserMenu";
 
 const drawerWidth = 240;
 
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ handleSidebarToggle, sidebarOpen }) {
+export default function Header({ handleSidebarToggle, sidebarOpen, session }) {
   const classes = useStyles();
   //   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -88,9 +90,9 @@ export default function Header({ handleSidebarToggle, sidebarOpen }) {
         <Typography variant="h6" className={classes.title}>
           LOGO
         </Typography>
-        {/* <Button color="inherit">
-          <UserMenu user={this.props.session} />
-        </Button> */}
+        <Button color="inherit">
+          <UserMenu user={session} />
+        </Button>
       </Toolbar>
     </AppBar>
   );
