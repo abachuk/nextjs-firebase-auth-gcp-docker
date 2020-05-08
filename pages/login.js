@@ -68,7 +68,7 @@ class Login extends Component {
         token: firebaseToken.token,
       })
       .then((resp) => {
-        console.log(resp);
+        window.location.replace("/");
       });
   };
 

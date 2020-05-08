@@ -8,7 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import Link from "next/link";
 import UserMenu from "./UserMenu";
+import Logo from "../../images/logo-sample.svg";
 
 const drawerWidth = 240;
 
@@ -36,8 +38,15 @@ const useStyles = makeStyles((theme) => ({
   hide: {
     display: "none",
   },
+  logo: {
+    flexGrow: 1,
+    color: "#fff",
+    display: "flex",
+    textDecoration: "none",
+  },
   title: {
     flexGrow: 1,
+    lineHeight: "50px",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -87,9 +96,14 @@ export default function Header({ handleSidebarToggle, sidebarOpen, session }) {
             <MenuIcon />
           </IconButton>
         </Hidden>
-        <Typography variant="h6" className={classes.title}>
-          LOGO
-        </Typography>
+        <Link href="/">
+          <a className={classes.logo}>
+            <Logo height="50" />
+            <Typography variant="subtitle1" className={classes.title}>
+              LOGO
+            </Typography>
+          </a>
+        </Link>
         <Button color="inherit">
           <UserMenu user={session} />
         </Button>
