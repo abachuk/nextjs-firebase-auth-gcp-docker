@@ -24,5 +24,8 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "session-file-store": "^1.0.0"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^5.4.0"
   }
 }
