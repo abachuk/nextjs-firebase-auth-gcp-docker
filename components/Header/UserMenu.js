@@ -1,6 +1,5 @@
 import React from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
@@ -31,10 +30,6 @@ export default function UserMenu(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
-  function handleChange(event) {
-    // setAuth(event.target.checked);
-  }
 
   function handleMenu(event) {
     setAnchorEl(event.currentTarget);

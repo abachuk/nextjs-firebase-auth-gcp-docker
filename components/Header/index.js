@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import AppBar from "@material-ui/core/AppBar";
@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Link from "next/link";
 import UserMenu from "./UserMenu";
 import Logo from "../../images/logo-sample.svg";
+import { user } from "../../utils/userContext";
 
 const drawerWidth = 240;
 
@@ -55,12 +56,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header({ handleSidebarToggle, sidebarOpen, session }) {
   const classes = useStyles();
-  //   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  //   function handleDrawerOpen() {
-  //     setSidebarOpen(true);
-  //   }
-
   return (
     <AppBar
       position="fixed"
@@ -105,7 +100,7 @@ export default function Header({ handleSidebarToggle, sidebarOpen, session }) {
           </a>
         </Link>
         <Button color="inherit">
-          <UserMenu user={session} />
+          <UserMenu user={user()} />
         </Button>
       </Toolbar>
     </AppBar>

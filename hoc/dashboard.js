@@ -4,6 +4,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { auth } from "../utils/firebase";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import { UserContext } from "../utils/userContext";
 
 const styles = (theme) => ({
   root: {
@@ -87,26 +88,27 @@ const withDashboard = (Page) => {
     render() {
       const { classes } = this.props;
       return (
-        <div className={classes.root}>
-          <CssBaseline />
-          <Header
-            handleSidebarToggle={this.handleSidebarToggle}
-            sidebarOpen={this.state.sidebarOpen}
-            session={this.props.session}
-          />
-          <Sidebar
-            isOpen={this.state.sidebarOpen}
-            mobileSidebarOpen={this.state.mobileSidebarOpen}
-            handleSidebarToggle={this.handleSidebarToggle}
-            handleDrawerClose={this.handleDrawerClose}
-            handleDrawerMobileClose={this.handleDrawerMobileClose}
-          />
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
+        <UserContext.Provider value={this.props.session}>
+          <div className={classes.root}>
+            <CssBaseline />
+            <Header
+              handleSidebarToggle={this.handleSidebarToggle}
+              sidebarOpen={this.state.sidebarOpen}
+            />
+            <Sidebar
+              isOpen={this.state.sidebarOpen}
+              mobileSidebarOpen={this.state.mobileSidebarOpen}
+              handleSidebarToggle={this.handleSidebarToggle}
+              handleDrawerClose={this.handleDrawerClose}
+              handleDrawerMobileClose={this.handleDrawerMobileClose}
+            />
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
 
-            <Page {...this.props} />
-          </main>
-        </div>
+              <Page {...this.props} />
+            </main>
+          </div>
+        </UserContext.Provider>
       );
     }
   }
