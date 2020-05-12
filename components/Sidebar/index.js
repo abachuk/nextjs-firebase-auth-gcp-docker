@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -15,6 +15,10 @@ import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import CategoryIcon from "@material-ui/icons/Category";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import ListItemText from "@material-ui/core/ListItemText";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import AddIcon from "@material-ui/icons/Add";
+import Collapse from "@material-ui/core/Collapse";
 import Link from "../../utils/activeLink";
 
 const drawerWidth = 240;
@@ -61,12 +65,20 @@ const useStyles = makeStyles((theme) => ({
   active: {
     background: "#ddd",
   },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
 }));
 
 export default function Sidebar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const { container } = props;
+  const [open, setOpen] = React.useState(null);
+  const handleClick = (menu) => {
+    open === menu ? setOpen(null) : setOpen(menu);
+  };
+
   return (
     <nav aria-label="mailbox folders">
       <Hidden smUp implementation="css">
@@ -150,13 +162,30 @@ export default function Sidebar(props) {
           <nav>
             <List>
               <Link href="/posts" activeClassName={classes.active}>
-                <ListItemLink button key="Posts">
+                <ListItemLink
+                  button
+                  key="Posts"
+                  onClick={() => handleClick("posts")}
+                >
                   <ListItemIcon>
                     <CommentIcon />
                   </ListItemIcon>
                   <ListItemText primary="Posts" />
+                  {open === "posts" ? <ExpandLess /> : <ExpandMore />}
                 </ListItemLink>
               </Link>
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link href="/posts/new">
+                    <ListItemLink button className={classes.nested}>
+                      <ListItemIcon>
+                        <AddIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Add New Post" />
+                    </ListItemLink>
+                  </Link>
+                </List>
+              </Collapse>
               <Link href="/teams" activeClassName={classes.active}>
                 <ListItemLink button key="Teams">
                   <ListItemIcon>
