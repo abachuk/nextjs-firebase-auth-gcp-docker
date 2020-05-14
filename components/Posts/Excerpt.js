@@ -13,16 +13,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostExcerpt() {
+export default function PostExcerpt({ post }) {
   const classes = useStyles();
   return (
     <>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar alt={post.title} src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary="Brunch this weekend?"
+          primary={post.title}
           secondary={
             <React.Fragment>
               <Typography
