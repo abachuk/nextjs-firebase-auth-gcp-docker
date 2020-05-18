@@ -37,7 +37,8 @@ const withDashboard = (Page) => {
       mobileSidebarOpen: false,
     };
 
-    static getInitialProps = async ({ req, res }) => {
+    static getInitialProps = async (ctx) => {
+      const { req, res } = ctx;
       const isServer = !!req;
       if (isServer) {
         if (
@@ -55,9 +56,14 @@ const withDashboard = (Page) => {
           }
         }
       }
+      let pageProps = {};
+      if (Page.getInitialProps) {
+        pageProps = await Page.getInitialProps(ctx);
+      }
       if (isServer) {
         return {
           session: req && req.session ? req.session.decodedToken : null,
+          ...pageProps,
         };
       } else {
         return {
@@ -67,6 +73,7 @@ const withDashboard = (Page) => {
             name: auth.currentUser.displayName,
             email: auth.currentUser.email,
           },
+          ...pageProps,
         };
       }
     };

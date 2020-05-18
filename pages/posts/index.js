@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import withDashboard from "../../hoc/dashboard";
 import { firestore } from "../../utils/firebase";
 import PostExcerpt from "../../components/Posts/Excerpt";
@@ -39,7 +40,7 @@ const Posts = (props) => {
   return (
     <>
       {isLoading ? (
-        "Loading..."
+        <CircularProgress />
       ) : (
         <List className={classes.root}>
           {posts.map((post) => (
@@ -49,6 +50,11 @@ const Posts = (props) => {
       )}
     </>
   );
+};
+
+Posts.getServerSideProps = async (ctx) => {
+  console.log("SSR");
+  return { ssr: true };
 };
 
 export default withDashboard(Posts);
