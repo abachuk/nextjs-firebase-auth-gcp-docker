@@ -34,6 +34,7 @@ const PostDetails = (props) => {
   );
 };
 
+/** SSR */
 PostDetails.getInitialProps = async (ctx) => {
   const postRef = firestore.collection("posts").doc(ctx.query.pid);
   const postRefDoc = await postRef.get();

@@ -27,7 +27,7 @@ const Posts = (props) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach(function (doc) {
-          setPosts([...posts, { id: doc.id, ...doc.data() }]);
+          setPosts([posts].concat({ id: doc.id, ...doc.data() }));
           setLoading(false);
         });
       })
@@ -50,11 +50,6 @@ const Posts = (props) => {
       )}
     </>
   );
-};
-
-Posts.getServerSideProps = async (ctx) => {
-  console.log("SSR");
-  return { ssr: true };
 };
 
 export default withDashboard(Posts);
